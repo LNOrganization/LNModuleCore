@@ -1,0 +1,16 @@
+PODS:
+  - LNModuleCore (0.1.0)
+
+DEPENDENCIES:
+  - LNModuleCore (from `../`)
+
+EXTERNAL SOURCES:
+  LNModuleCore:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  LNModuleCore: ca170e26c8cc83ddac15ffb3e5083ebc20b5c9c5
+
+PODFILE CHECKSUM: 331ec2136fe748244d11e751cdb66cc0d479c754
+
+COCOAPODS: 1.10.0
