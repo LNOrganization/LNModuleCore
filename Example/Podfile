@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '9.0'
+
+target 'LNModuleCore_Example' do
+  pod 'LNModuleCore', :path => '../'
+
+  target 'LNModuleCore_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
