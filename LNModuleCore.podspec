@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 TODO: Add long description of the pod here.
                        DESC
 
-  s.homepage         = 'https://github.com/NoNameOrganazation/LNModuleCore'
+  s.homepage         = 'https://github.com/NoNameOrganazation'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'dongjianxiong' => 'jianxiong20090919@126.com' }
@@ -31,6 +31,8 @@ TODO: Add long description of the pod here.
   s.ios.deployment_target = '9.0'
 
   s.source_files = 'LNModuleCore/Classes/**/*'
+  
+  s.dependency 'AFNetworking', '~> 2.3'
   
   # s.resource_bundles = {
   #   'LNModuleCore' => ['LNModuleCore/Assets/*.png']
