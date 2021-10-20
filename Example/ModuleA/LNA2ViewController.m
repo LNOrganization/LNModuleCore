@@ -1,0 +1,32 @@
+//
+//  LNA2ViewController.m
+//  ModuleA
+//
+//  Created by Lenny on 2021/10/19.
+//  Copyright © 2021 dongjianxiong1. All rights reserved.
+//
+
+#import "LNA2ViewController.h"
+
+@interface LNA2ViewController ()
+
+@end
+
+@implementation LNA2ViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

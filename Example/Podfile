@@ -7,7 +7,13 @@ target 'LNModuleCore_Example' do
 
   target 'LNModuleCore_Tests' do
     inherit! :search_paths
-
-    
   end
+end
+
+target 'ModuleA' do
+  pod 'LNModuleCore', :path => '../'
+end
+
+target 'ModuleB' do
+  pod 'LNModuleCore', :path => '../'
 end

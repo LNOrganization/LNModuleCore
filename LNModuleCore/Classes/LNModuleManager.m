@@ -6,7 +6,7 @@
 //
 
 #import "LNModuleManager.h"
-#import "LNModuleProtocol.h"
+#import "LNModuleBaseProtocol.h"
 
 @interface LNModuleManager ()
 
@@ -49,7 +49,7 @@
     }
 }
 
-- (id<LNModuleProtocol>)createImpInstanceWithClassName:(NSString *)impClassname
+- (id<LNModuleBaseProtocol>)createImpInstanceWithClassName:(NSString *)impClassname
                                           protocolName:(NSString *)protocolName
 {
     if (!impClassname) {
@@ -72,7 +72,7 @@
     return nil;
 }
 
-- (void)addImpInstance:(id<LNModuleProtocol>)impInstacne
+- (void)addImpInstance:(id<LNModuleBaseProtocol>)impInstacne
           protocolName:(NSString *)protocolName
 {
     if (!impInstacne) {
@@ -88,7 +88,7 @@
     [_lock unlock];
 }
 
-- (id<LNModuleProtocol>)impInstanceForProtocol:(Protocol *)protocol
+- (id<LNModuleBaseProtocol>)impInstanceForProtocol:(Protocol *)protocol
 {
     if (!protocol) {
         return nil;
@@ -97,10 +97,10 @@
     return [self impInstanceForProtocolName:protocolName];
 }
 
-- (id<LNModuleProtocol>)impInstanceForProtocolName:(NSString *)protocolName
+- (id<LNModuleBaseProtocol>)impInstanceForProtocolName:(NSString *)protocolName
 {
     
-    id<LNModuleProtocol> impInstance = [_allImpInstanceInfos objectForKey:protocolName];;
+    id<LNModuleBaseProtocol> impInstance = [_allImpInstanceInfos objectForKey:protocolName];;
     if (impInstance) {
         return impInstance;
     }
@@ -123,7 +123,7 @@
         if (_modulNames) {
             [_modulNames enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
                 NSString *impClassname = obj;
-                id<LNModuleProtocol> modul = [self createImpInstanceWithClassName:impClassname protocolName:key];
+                id<LNModuleBaseProtocol> modul = [self createImpInstanceWithClassName:impClassname protocolName:key];
                 [self addImpInstance:modul protocolName:key];
             }];
         }

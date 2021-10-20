@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "LNModuleAppDelegate.h"
-#import "LNModuleProtocol.h"
+#import "LNModuleBaseProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,9 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addImpClassName:(NSString *)impClassName
            protocolName:(NSString *)protocolName;
 
-//- (id<LNModuleProtocol>)impInstanceForProtocol:(Protocol *)protocol;
+- (id<LNModuleBaseProtocol>)impInstanceForProtocol:(Protocol *)protocol;
 
-- (id<LNModuleProtocol>)impInstanceForProtocolName:(NSString *)protocolName;
+//- (id<LNModuleBaseProtocol>)impInstanceForProtocolName:(NSString *)protocolName;
 
 - (NSDictionary *)allImpInstanceInfos;
 

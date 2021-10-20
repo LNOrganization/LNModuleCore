@@ -8,8 +8,10 @@
 
 @import UIKit;
 
-@interface LNAppDelegate : UIResponder <UIApplicationDelegate>
+#import <LNModuleCore/LNModuleCore.h>
 
-@property (strong, nonatomic) UIWindow *window;
+@interface LNAppDelegate : LNModuleAppDelegate
+
+//@property (strong, nonatomic) UIWindow *window;
 
 @end

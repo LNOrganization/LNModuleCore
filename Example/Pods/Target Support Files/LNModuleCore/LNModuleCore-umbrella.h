@@ -11,9 +11,9 @@
 #endif
 
 #import "LNModuleAppDelegate.h"
+#import "LNModuleBaseProtocol.h"
 #import "LNModuleCore.h"
 #import "LNModuleManager.h"
-#import "LNModuleProtocol.h"
 
 FOUNDATION_EXPORT double LNModuleCoreVersionNumber;
 FOUNDATION_EXPORT const unsigned char LNModuleCoreVersionString[];
