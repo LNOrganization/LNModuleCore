@@ -13,10 +13,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
-    id<LNModuleBaseProtocol> impInstance = [[LNModuleManager sharedInstance] impInstanceForProtocol:@protocol(LNModuleBaseProtocol)];
-    if ([impInstance respondsToSelector:@selector(modulVersion)]) {
-        NSString *version = [impInstance modulVersion];
-        NSLog(@"modulVersion:%@", version);
+    id impInstance = [[LNModuleManager sharedInstance] impInstanceForProtocol:@protocol(UIApplicationDelegate)];
+    if (impInstance) {
+        NSLog(@"impInstance:%@", impInstance);
     }
     // Override point for customization after application launch.
     return [super application:application didFinishLaunchingWithOptions:launchOptions];

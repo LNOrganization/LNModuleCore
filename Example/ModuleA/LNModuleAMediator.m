@@ -16,15 +16,15 @@
 
 @implementation LNModuleAMediator
 
-- (NSString *)modulVersion
+- (NSString *)version
 {
     return @"0.1.1";
 }
 
 
-- (NSString *)modulName
+- (void)doInitialize
 {
-    return @"LNModuleA";
+    NSLog(@"Init finish");
 }
 
 @end

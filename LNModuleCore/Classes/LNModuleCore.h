@@ -5,6 +5,6 @@
 //  Created by Lenny on 2020/6/30.
 //
 
-#import "LNModuleManager.h"
-#import "LNModuleAppDelegate.h"
-#import "LNModuleBaseProtocol.h"
+#import <LNModuleCore/LNModuleManager.h>
+#import <LNModuleCore/LNModuleAppDelegate.h>
+#import <LNModuleCore/LNModuleBaseProtocol.h>

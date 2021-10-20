@@ -137,4 +137,18 @@
     return dict;
 }
 
+- (void)creatImpInstancesWithProtocols:(NSArray<Protocol *> *)protocols
+{
+    for (Protocol *protocol in protocols) {
+        NSString *protocolName = NSStringFromProtocol(protocol);
+       [self impInstanceForProtocolName:protocolName];
+    }
+}
+
+- (NSDictionary *)creatImpInstancesDidFinishLaunching
+{
+    return [self allImpInstanceInfos];
+}
+
+
 @end

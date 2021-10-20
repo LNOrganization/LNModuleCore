@@ -21,9 +21,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (id<LNModuleBaseProtocol>)impInstanceForProtocol:(Protocol *)protocol;
 
-//- (id<LNModuleBaseProtocol>)impInstanceForProtocolName:(NSString *)protocolName;
-
 - (NSDictionary *)allImpInstanceInfos;
+
+- (void)creatImpInstancesWithProtocols:(NSArray<Protocol *> *)protocols;
+
+- (NSDictionary *)creatImpInstancesDidFinishLaunching;
 
 @end
 
