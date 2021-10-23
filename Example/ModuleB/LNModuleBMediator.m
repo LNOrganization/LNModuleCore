@@ -7,11 +7,10 @@
 //
 
 #import "LNModuleBMediator.h"
-#import <LNModuleCore/LNModuleCore.h>
+#import <LNModuleCore/LNModuleCoreProtocol.h>
 
 
-@interface LNModuleBMediator ()<LNModuleBaseProtocol>
-
+@interface LNModuleBMediator ()<LNModuleCoreProtocol>
 
 @end
 

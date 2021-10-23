@@ -6,7 +6,6 @@
 //
 
 #import "LNModuleManager.h"
-#import "LNModuleBaseProtocol.h"
 
 @interface LNModuleManager ()
 
@@ -49,7 +48,7 @@
     }
 }
 
-- (id<LNModuleBaseProtocol>)createImpInstanceWithClassName:(NSString *)impClassname
+- (id)createImpInstanceWithClassName:(NSString *)impClassname
                                           protocolName:(NSString *)protocolName
 {
     if (!impClassname) {
@@ -72,7 +71,7 @@
     return nil;
 }
 
-- (void)addImpInstance:(id<LNModuleBaseProtocol>)impInstacne
+- (void)addImpInstance:(id)impInstacne
           protocolName:(NSString *)protocolName
 {
     if (!impInstacne) {
@@ -88,7 +87,7 @@
     [_lock unlock];
 }
 
-- (id<LNModuleBaseProtocol>)impInstanceForProtocol:(Protocol *)protocol
+- (id)impInstanceForProtocol:(Protocol *)protocol
 {
     if (!protocol) {
         return nil;
@@ -97,10 +96,10 @@
     return [self impInstanceForProtocolName:protocolName];
 }
 
-- (id<LNModuleBaseProtocol>)impInstanceForProtocolName:(NSString *)protocolName
+- (id)impInstanceForProtocolName:(NSString *)protocolName
 {
     
-    id<LNModuleBaseProtocol> impInstance = [_allImpInstanceInfos objectForKey:protocolName];;
+    id impInstance = [_allImpInstanceInfos objectForKey:protocolName];;
     if (impInstance) {
         return impInstance;
     }
@@ -117,25 +116,29 @@
 - (NSDictionary *)allImpInstanceInfos;
 {
     NSDictionary *dict = nil;
-    if (!_allImpInstanceInfos) {
-        [_lock lock];
-        _allImpInstanceInfos = [[NSMutableDictionary alloc] init];
-        if (_modulNames) {
-            [_modulNames enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                NSString *impClassname = obj;
-                id<LNModuleBaseProtocol> modul = [self createImpInstanceWithClassName:impClassname protocolName:key];
-                [self addImpInstance:modul protocolName:key];
-            }];
-        }
-        dict = [_allImpInstanceInfos copy];
-        
-    }else{
-        [_lock lock];
-        dict = [_allImpInstanceInfos copy];
-        [_lock unlock];
-    }
+//    if (!_allImpInstanceInfos) {
+//        [_lock lock];
+//        _allImpInstanceInfos = [[NSMutableDictionary alloc] init];
+//        if (_modulNames) {
+//            [_modulNames enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+//                NSString *impClassname = obj;
+//                id module = [self createImpInstanceWithClassName:impClassname protocolName:key];
+//                [self addImpInstance:module protocolName:key];
+//            }];
+//        }
+//        dict = [_allImpInstanceInfos copy];
+//        [_lock unlock];
+//    }else{
+//        [_lock lock];
+//        dict = [_allImpInstanceInfos copy];
+//        [_lock unlock];
+//    }
+    [_lock lock];
+    dict = [_allImpInstanceInfos copy];
+    [_lock unlock];
     return dict;
 }
+
 
 - (void)creatImpInstancesWithProtocols:(NSArray<Protocol *> *)protocols
 {
@@ -145,10 +148,22 @@
     }
 }
 
-- (NSDictionary *)creatImpInstancesDidFinishLaunching
-{
-    return [self allImpInstanceInfos];
-}
+//- (NSDictionary *)creatImpInstancesDidFinishLaunching
+//{
+//    NSDictionary *dict = nil;
+//    [_lock lock];
+//    _allImpInstanceInfos = [[NSMutableDictionary alloc] init];
+//    if (_modulNames) {
+//        [_modulNames enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+//            NSString *impClassname = obj;
+//            id module = [self createImpInstanceWithClassName:impClassname protocolName:key];
+//            [self addImpInstance:module protocolName:key];
+//        }];
+//    }
+//    dict = [_allImpInstanceInfos copy];
+//    [_lock unlock];
+//    return [self allImpInstanceInfos];
+//}
 
 
 @end

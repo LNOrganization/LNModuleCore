@@ -11,8 +11,8 @@
 #endif
 
 #import "LNModuleAppDelegate.h"
-#import "LNModuleBaseProtocol.h"
 #import "LNModuleCore.h"
+#import "LNModuleCoreProtocol.h"
 #import "LNModuleManager.h"
 
 FOUNDATION_EXPORT double LNModuleCoreVersionNumber;

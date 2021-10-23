@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "LNModuleCoreProtocol.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LNModuleAppDelegate : UIResponder<UIApplicationDelegate>
+@interface LNModuleAppDelegate : UIResponder<LNModuleCoreProtocol>
 
 @end
 
