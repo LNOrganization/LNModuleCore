@@ -1,7 +1,7 @@
 {
   "name": "LNModuleCore",
-  "version": "0.1.2",
-  "summary": "A short description of LNModuleCore.",
+  "version": "0.1.4",
+  "summary": "负责管理组件的集成、注册、初始化等.",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/NoNameOrganazation",
   "license": {
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/NoNameOrganazation/LNModuleCore.git",
-    "tag": "0.1.2"
+    "tag": "0.1.4"
   },
   "platforms": {
     "ios": "9.0"
