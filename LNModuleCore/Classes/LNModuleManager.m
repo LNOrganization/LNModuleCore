@@ -61,7 +61,12 @@
     }
     Class impClass = NSClassFromString(impClassname);
     if (impClass) {
-        id imp = [[impClass alloc] init];
+        id imp = nil;
+        if ([impClass resolveClassMethod:@selector(sharedInstance)]) {
+            imp = [impClass sharedInstance];
+        }else{
+            imp = [[impClass alloc] init];
+        }
         if ([imp conformsToProtocol:NSProtocolFromString(protocolName)]) {
             return imp;
         }
