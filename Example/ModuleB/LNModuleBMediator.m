@@ -7,14 +7,34 @@
 //
 
 #import "LNModuleBMediator.h"
-#import <LNModuleCore/LNModuleCoreProtocol.h>
+#import <LNModuleCore/LNModuleCore.h>
+#import <LNModuleProtocol/LNAccountModuleProtocol.h>
 
 
-@interface LNModuleBMediator ()<LNModuleCoreProtocol>
+__attribute__((constructor)) void addModulLNModuleBMediator(void){
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [[LNModuleManager sharedInstance] addImpClassName:@"LNModuleBMediator" protocolName:@"LNAccountModuleProtocol"];
+    });
+}
+
+
+@interface LNModuleBMediator ()<LNAccountModuleProtocol>
 
 @end
 
 @implementation LNModuleBMediator
+
++(LNModuleBMediator *)sharedInstance
+{
+    static LNModuleBMediator *instance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instance = [[LNModuleBMediator alloc] init];
+    });
+    return instance;
+}
 
 - (NSString *)version
 {
@@ -27,5 +47,42 @@
     NSLog(@"Init finish");
 }
 
+
+- (void)getAccountInfo:(LNLoginCompletion)completion {
+    
+}
+
+- (BOOL)isLogin {
+    return YES;
+}
+
+- (BOOL)loginIfNeed:(LNLoginCompletion)completion {
+    if ([self isLogin]) {
+        return YES;
+    }else{
+        completion(nil, nil);
+    }
+    return NO;
+}
+
+- (void)logout {
+    
+}
+
+- (void)registerLoginCompletionNotify:(LNLoginCompletion)completion forKey:(NSString *)key {
+    
+}
+
+- (void)registerLogoutCompletionNotify:(LNLogotCompletion)completion forKey:(NSString *)key {
+    
+}
+
+- (void)removeLoginNotificationForKey:(NSString *)key {
+    
+}
+
+- (void)removeLogoutNotificationForKey:(NSString *)key {
+    
+}
 
 @end

@@ -7,15 +7,16 @@
 //
 
 #import "LNAppDelegate.h"
+#import <LNModuleProtocol/LNAccountModuleProtocol.h>
 
 @implementation LNAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
-    id impInstance = [[LNModuleManager sharedInstance] impInstanceForProtocol:@protocol(UIApplicationDelegate)];
+    id<LNAccountModuleProtocol> impInstance = [[LNModuleManager sharedInstance] impInstanceForProtocol:@protocol(LNAccountModuleProtocol)];
     if (impInstance) {
-        NSLog(@"impInstance:%@", impInstance);
+        NSLog(@"impInstance:%@", @([impInstance isLogin]));
     }
     // Override point for customization after application launch.
     return [super application:application didFinishLaunchingWithOptions:launchOptions];

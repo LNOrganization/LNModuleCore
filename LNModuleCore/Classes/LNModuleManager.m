@@ -62,7 +62,7 @@
     Class impClass = NSClassFromString(impClassname);
     if (impClass) {
         id imp = nil;
-        if ([impClass resolveClassMethod:@selector(sharedInstance)]) {
+        if ([impClass respondsToSelector:@selector(sharedInstance)]) {
             imp = [impClass sharedInstance];
         }else{
             imp = [[impClass alloc] init];
