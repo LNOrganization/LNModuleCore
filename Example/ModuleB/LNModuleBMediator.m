@@ -47,7 +47,12 @@ __attribute__((constructor)) void addModulLNModuleBMediator(void){
     NSLog(@"Init finish");
 }
 
+- (void)deInitialize {
+    NSLog(@"Init destroy");
+    [[LNModuleManager sharedInstance] removeInstanceForProtocol:@protocol(LNAccountModuleProtocol)];
+}
 
+#pragma mark - LNAccountModuleProtocol
 - (void)getAccountInfo:(LNLoginCompletion)completion {
     
 }
@@ -83,6 +88,17 @@ __attribute__((constructor)) void addModulLNModuleBMediator(void){
 
 - (void)removeLogoutNotificationForKey:(NSString *)key {
     
+}
+
+@end
+
+
+@implementation  LNModuleBMediator (AppDelegate)
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey,id> *)launchOptions
+{
+    
+    return YES;
 }
 
 @end

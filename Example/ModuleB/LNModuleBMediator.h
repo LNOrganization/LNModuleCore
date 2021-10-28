@@ -14,4 +14,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+
+@interface LNModuleBMediator (AppDelegate)
+
+@end
+
+
+
 NS_ASSUME_NONNULL_END

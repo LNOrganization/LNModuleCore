@@ -14,6 +14,12 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
+    
+    // 需要在启动时初始化的组件
+    [[LNModuleManager sharedInstance] creatImpInstancesWithProtocols:@[
+        @protocol(LNAccountModuleProtocol),
+        @protocol(LNFeedModuleProtocol)]];
+    
     id<LNAccountModuleProtocol> impInstance = [[LNModuleManager sharedInstance] impInstanceForProtocol:@protocol(LNAccountModuleProtocol)];
     if (impInstance) {
         NSLog(@"impInstance:%@", @([impInstance isLogin]));

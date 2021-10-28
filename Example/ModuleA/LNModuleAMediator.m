@@ -10,6 +10,14 @@
 #import <LNModuleCore/LNModuleCore.h>
 #import <LNModuleProtocol/LNModuleProtocol.h>
 
+__attribute__((constructor)) void addModulModuleAMediator(void){
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [[LNModuleManager sharedInstance] addImpClassName:@"LNModuleAMediator" protocolName:@"LNFeedModuleProtocol"];
+    });
+}
+
 @interface LNModuleAMediator ()<LNFeedModuleProtocol>
 
 @end
@@ -21,10 +29,31 @@
     return @"0.1.1";
 }
 
-
 - (void)doInitialize
 {
     NSLog(@"Init finish");
+}
+
+- (UIViewController *)getFeedDetailViewControllerWithFeedId:(NSString *)feedId {
+    return [[UIViewController alloc] init];
+}
+
+- (UIViewController *)getMainFeedViewController {
+    return [[UIViewController alloc] init];
+}
+
+- (UIViewController *)getRecommendFeedViewController {
+    return [[UIViewController alloc] init];
+}
+
+- (UIViewController *)getTimeLineFeedViewController {
+    return [[UIViewController alloc] init];
+}
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey,id> *)launchOptions
+{
+    
+    return YES;
 }
 
 @end
