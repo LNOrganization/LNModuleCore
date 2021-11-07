@@ -31,7 +31,7 @@ __attribute__((constructor)) void addModulModuleAMediator(void){
 
 - (void)doInitialize
 {
-    NSLog(@"Init finish");
+    NSLog(@"LNModuleA Init finish");
 }
 
 - (UIViewController *)getFeedDetailViewControllerWithFeedId:(NSString *)feedId {

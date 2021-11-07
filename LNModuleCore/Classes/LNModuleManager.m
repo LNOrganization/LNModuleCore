@@ -15,6 +15,8 @@
 
 @property(nonatomic, strong) NSRecursiveLock *lock;
 
+@property(nonatomic, strong) NSLock *modulNameLock;
+
 @end
 
 @implementation LNModuleManager
@@ -37,6 +39,7 @@
         _modulNames = [[NSMutableDictionary alloc] init];
         _allImpInstanceInfos = [[NSMutableDictionary alloc] init];
         _lock = [[NSRecursiveLock alloc] init];
+        _modulNameLock = [[NSLock alloc] init];
     }
     return self;
 }
@@ -45,57 +48,12 @@
            protocolName:(NSString *)protocolName
 {
     if (impClassName && protocolName) {
+        [_modulNameLock lock];
         [self.modulNames setObject:impClassName forKey:protocolName];
+        [_modulNameLock unlock];
     }
 }
 
-- (id)createImpInstanceWithClass:(Class)impClass
-                        protocol:(Protocol *)protocol
-{
-    if (!impClass) {
-        NSLog(@"ImpClass is nill");
-        return nil;
-    }
-    if (!protocol) {
-        NSLog(@"Protocol is nil");
-        return nil;
-    }
-    if (![impClass conformsToProtocol:protocol]) {
-        NSLog(@"Class %@ do not conforms to protocol:%@", impClass, protocol);
-        return nil;
-    }
-    id imp = nil;
-    if ([impClass respondsToSelector:@selector(sharedInstance)]) {
-       imp = [impClass sharedInstance];
-    }else{
-        imp = [[impClass alloc] init];
-    }
-    if (![imp conformsToProtocol:protocol]) {
-        NSLog(@"Instance %@ do not conforms to protocol:%@", imp, protocol);
-        return nil;
-    }else{
-        if ([imp respondsToSelector:@selector(doInitialize)]) {
-            [imp doInitialize];
-        }
-    }
-    return imp;
-}
-
-- (void)addImpInstance:(id)impInstacne
-          protocolName:(NSString *)protocolName
-{
-    if (!impInstacne) {
-        NSLog(@"Invalid impInstacne:%@", impInstacne);
-        return;
-    }
-    if (!protocolName) {
-        NSLog(@"Invalid protocolName:%@", protocolName);
-        return;
-    }
-    [_lock lock];
-    [_allImpInstanceInfos setObject:impInstacne forKey:protocolName];
-    [_lock unlock];
-}
 
 - (id)impInstanceForProtocol:(Protocol *)protocol
 {
@@ -104,22 +62,7 @@
         return nil;
     }
     NSString *protocolName = NSStringFromProtocol(protocol);
-    id impInstance = nil;
-    [_lock lock];
-    impInstance = [_allImpInstanceInfos objectForKey:protocolName];
-    [_lock unlock];
-    if (impInstance) {
-        return impInstance;
-    }
-    NSString *className = [self.modulNames objectForKey:protocolName];
-    if (!className) {
-        NSLog(@"No valid implementation class name for protocol:%@",protocolName);
-        return nil;
-    }
-    Class impCls = NSClassFromString(className);
-    impInstance = [self createImpInstanceWithClass:impCls protocol:protocol];
-    [self addImpInstance:impInstance protocolName:protocolName];
-    return impInstance;
+    return [self impInstanceForProtocolName:protocolName];
 }
 
 
@@ -129,35 +72,23 @@
         NSLog(@"protocolName is nil");
         return nil;
     }
-    Protocol *protocol = NSProtocolFromString(protocolName);
-    if (!protocol) {
-        NSLog(@"No valid Protocol name %@", protocolName);
+    id impInstance = [self _getImpInstanceForProtocolName:protocolName];
+    if (impInstance) {
+        return impInstance;
+    }
+    
+    NSString *className = nil;
+    [_modulNameLock lock];
+    className = [self.modulNames objectForKey:protocolName];
+    [_modulNameLock unlock];
+    if (!className) {
+        NSLog(@"No valid implementation class name for protocol:%@",protocolName);
         return nil;
     }
-    return [self impInstanceForProtocol:protocol];
+    Class impCls = NSClassFromString(className);
+    impInstance = [self _createImpInstanceWithClass:impCls protocolName:protocolName];
+    return impInstance;
 }
-
-- (void)removeInstanceForProtocol:(Protocol *)protocol
-{
-    if (!protocol) {
-        return;
-    }
-    NSString *protocolName = NSStringFromProtocol(protocol);
-    [_lock lock];
-    [_allImpInstanceInfos removeObjectForKey:protocolName];
-    [_lock unlock];
-    
-}
-
-- (NSDictionary *)allImpInstanceInfos;
-{
-    NSDictionary *dict = nil;
-    [_lock lock];
-    dict = [_allImpInstanceInfos copy];
-    [_lock unlock];
-    return dict;
-}
-
 
 - (void)creatImpInstancesWithProtocols:(NSArray<Protocol *> *)protocols
 {
@@ -170,5 +101,97 @@
         }
     }
 }
+
+- (void)removeInstanceForProtocol:(Protocol *)protocol
+{
+    if (!protocol) {
+        return;
+    }
+    NSString *protocolName = NSStringFromProtocol(protocol);
+    [self removeInstanceForProtocolName:protocolName];
+}
+
+- (void)removeInstanceForProtocolName:(NSString *)protocolName
+{
+    [self _removeInstanceForProtocolName:protocolName];
+}
+
+- (NSDictionary *)allImpInstanceInfos;
+{
+    NSDictionary *dict = nil;
+    [_lock lock];
+    dict = [_allImpInstanceInfos copy];
+    [_lock unlock];
+    return dict;
+}
+
+#pragma mark -private method
+
+- (id)_createImpInstanceWithClass:(Class)impClass
+                    protocolName:(NSString *)protocolName
+{
+    if (!impClass) {
+        NSLog(@"ImpClass is nill");
+        return nil;
+    }
+    if (!protocolName) {
+        NSLog(@"protocolName is nil");
+        return nil;
+    }
+    id imp = nil;
+    if ([impClass respondsToSelector:@selector(sharedInstance)]) {
+       imp = [impClass sharedInstance];
+    }else{
+        imp = [[impClass alloc] init];
+    }
+    Protocol *protocol = NSProtocolFromString(protocolName);
+    if (![imp conformsToProtocol:protocol]) {
+        NSLog(@"Instance %@ do not conforms to protocol:%@", imp, protocol);
+        return nil;
+    }else{
+        if ([imp respondsToSelector:@selector(doInitialize)]) {
+            [imp doInitialize];
+        }
+        [self _addImpInstance:imp forProtocolName:protocolName];
+    }
+    return imp;
+}
+
+- (void)_removeInstanceForProtocolName:(NSString *)protocolName
+{
+    if (!protocolName) {
+        return;
+    }
+    [_lock lock];
+    [_allImpInstanceInfos removeObjectForKey:protocolName];
+    [_lock unlock];
+    
+}
+
+- (id)_getImpInstanceForProtocolName:(NSString *)protocolName
+{
+    id impInstance = nil;
+    [_lock lock];
+    impInstance = [_allImpInstanceInfos objectForKey:protocolName];
+    [_lock unlock];
+    return impInstance;
+}
+
+- (void)_addImpInstance:(id)impInstance forProtocolName:(NSString *)protocolName
+{
+    if (!impInstance) {
+        NSLog(@"Invalid impInstacne:%@", impInstance);
+        return;
+    }
+    if (!protocolName) {
+        NSLog(@"Invalid protocolName:%@", protocolName);
+        return;
+    }
+    [_lock lock];
+    [_allImpInstanceInfos setObject:impInstance forKey:protocolName];
+    [_lock unlock];
+}
+
+
 
 @end

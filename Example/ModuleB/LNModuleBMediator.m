@@ -44,7 +44,7 @@ __attribute__((constructor)) void addModulLNModuleBMediator(void){
 
 - (void)doInitialize
 {
-    NSLog(@"Init finish");
+    NSLog(@"LNModuleB Init finish");
 }
 
 - (void)deInitialize {
