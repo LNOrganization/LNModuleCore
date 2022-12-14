@@ -13,8 +13,9 @@
 #import "LNAccountModuleProtocol.h"
 #import "LNFeedModuleProtocol.h"
 #import "LNLiveModuleProtocol.h"
-#import "LNModuleBaseProtocol.h"
 #import "LNModuleProtocol.h"
+#import "LNProtocolConfig.h"
+#import "LNUserCenterModuleProtocol.h"
 #import "LNVideoModuleProtocol.h"
 
 FOUNDATION_EXPORT double LNModuleProtocolVersionNumber;

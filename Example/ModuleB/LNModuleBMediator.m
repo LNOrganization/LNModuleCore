@@ -11,7 +11,7 @@
 #import <LNModuleProtocol/LNAccountModuleProtocol.h>
 
 
-__attribute__((constructor)) void addModulLNModuleBMediator(void){
+__attribute__((constructor)) void addModuleLNModuleBMediator(void){
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -53,15 +53,12 @@ __attribute__((constructor)) void addModulLNModuleBMediator(void){
 }
 
 #pragma mark - LNAccountModuleProtocol
-- (void)getAccountInfo:(LNLoginCompletion)completion {
-    
-}
 
 - (BOOL)isLogin {
     return YES;
 }
 
-- (BOOL)loginIfNeed:(LNLoginCompletion)completion {
+- (BOOL)loginIfNeed:(LNLoginBlock)completion {
     if ([self isLogin]) {
         return YES;
     }else{
@@ -70,25 +67,25 @@ __attribute__((constructor)) void addModulLNModuleBMediator(void){
     return NO;
 }
 
-- (void)logout {
+- (void)logout
+{
     
 }
 
-- (void)registerLoginCompletionNotify:(LNLoginCompletion)completion forKey:(NSString *)key {
+- (NSDictionary *)getLoginUserInfo
+{
+    return nil;
+}
+
+- (void)addObserver:(id)observer forLoginBlock:(LNLoginBlock)block
+{
+    
+}
+- (void)addObserver:(id)observer forLogoutBlock:(LNLogoutBlock)block
+{
     
 }
 
-- (void)registerLogoutCompletionNotify:(LNLogotCompletion)completion forKey:(NSString *)key {
-    
-}
-
-- (void)removeLoginNotificationForKey:(NSString *)key {
-    
-}
-
-- (void)removeLogoutNotificationForKey:(NSString *)key {
-    
-}
 
 @end
 

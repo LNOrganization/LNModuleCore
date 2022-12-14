@@ -10,7 +10,7 @@
 #import <LNModuleCore/LNModuleCore.h>
 #import <LNModuleProtocol/LNModuleProtocol.h>
 
-__attribute__((constructor)) void addModulModuleAMediator(void){
+__attribute__((constructor)) void addModuleModuleAMediator(void){
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

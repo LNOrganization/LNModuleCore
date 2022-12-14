@@ -7,15 +7,26 @@
 
 #import "LNModuleManager.h"
 #import "LNModuleBaseProtocol.h"
+
+
+#define LOCK(...) dispatch_semaphore_wait(_moduleNameLock, DISPATCH_TIME_FOREVER); \
+__VA_ARGS__; \
+dispatch_semaphore_signal(_moduleNameLock);
+
 @interface LNModuleManager ()
+{
+    dispatch_semaphore_t _moduleNameLock;
+}
 
-@property(nonatomic, strong) NSMutableDictionary *modulNames;
+/** 缓存Delegate名称和组件实现类名的映射表*/
+@property(nonatomic, strong) NSMutableDictionary *moduleNames;
 
+/** 缓存Delegate名称和组件实现对象的映射表*/
 @property(nonatomic, strong) NSMutableDictionary *allImpInstanceInfos;
 
+/** 递归锁，用于同步映射表allImpInstanceInfos读写*/
 @property(nonatomic, strong) NSRecursiveLock *lock;
 
-@property(nonatomic, strong) NSLock *modulNameLock;
 
 @end
 
@@ -36,10 +47,11 @@
 {
     self = [super init];
     if (self) {
-        _modulNames = [[NSMutableDictionary alloc] init];
+        _moduleNames = [[NSMutableDictionary alloc] init];
         _allImpInstanceInfos = [[NSMutableDictionary alloc] init];
         _lock = [[NSRecursiveLock alloc] init];
-        _modulNameLock = [[NSLock alloc] init];
+        _moduleNameLock = dispatch_semaphore_create(1);
+
     }
     return self;
 }
@@ -47,13 +59,8 @@
 - (void)addImpClassName:(NSString *)impClassName
            protocolName:(NSString *)protocolName
 {
-    if (impClassName && protocolName) {
-        [_modulNameLock lock];
-        [self.modulNames setObject:impClassName forKey:protocolName];
-        [_modulNameLock unlock];
-    }
+    [self _safeAddImpClassName:impClassName protocolName:protocolName];
 }
-
 
 - (id)impInstanceForProtocol:(Protocol *)protocol
 {
@@ -77,10 +84,7 @@
         return impInstance;
     }
     
-    NSString *className = nil;
-    [_modulNameLock lock];
-    className = [self.modulNames objectForKey:protocolName];
-    [_modulNameLock unlock];
+    NSString *className = [self _safeGetImpClassNameWithProtocolName:protocolName];
     if (!className) {
         NSLog(@"No valid implementation class name for protocol:%@",protocolName);
         return nil;
@@ -180,7 +184,7 @@
 - (void)_addImpInstance:(id)impInstance forProtocolName:(NSString *)protocolName
 {
     if (!impInstance) {
-        NSLog(@"Invalid impInstacne:%@", impInstance);
+        NSLog(@"Invalid impInstance:%@", impInstance);
         return;
     }
     if (!protocolName) {
@@ -193,5 +197,17 @@
 }
 
 
+ - (void)_safeAddImpClassName:(NSString *)impClassName
+               protocolName:(NSString *)protocolName
+{
+    if (impClassName && protocolName) {
+        LOCK([_moduleNames setObject:impClassName forKey:protocolName];);
+    }
+}
+
+- (NSString *)_safeGetImpClassNameWithProtocolName:(NSString *)protocolName
+{
+    LOCK(NSString * className = [_moduleNames objectForKey:protocolName];); return className;;
+}
 
 @end

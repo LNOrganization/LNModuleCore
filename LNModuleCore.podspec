@@ -32,7 +32,7 @@ TODO: Add long description of the pod here.
 
   s.source_files = 'LNModuleCore/Classes/**/*'
 
-  
+
   # s.resource_bundles = {
   #   'LNModuleCore' => ['LNModuleCore/Assets/*.png']
   # }
