@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'LNModuleCore'
-  s.version          = '0.1.9'
+  s.version          = '1.0.0'
   s.summary          = '负责管理组件的集成、注册、初始化等.'
 
 # This description is used to generate tags and improve search results.
